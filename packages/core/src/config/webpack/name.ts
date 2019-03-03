@@ -1,11 +1,17 @@
 import { Configuration } from "webpack";
-import { Env } from "../types";
+import { Target, Mode } from "../types";
 
-export default ({ env }: { env: Env }): Configuration["name"] => {
+export default ({
+  target,
+  mode
+}: {
+  target: Target;
+  mode: Mode;
+}): Configuration["name"] => {
   const config = {
     module: "client",
     es5: "es5",
     node: "server"
   };
-  return config[env];
+  return config[target];
 };
