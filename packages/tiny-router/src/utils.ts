@@ -11,11 +11,11 @@ export const parsePath = (
     fullPath = pathOrLink;
   }
 
-  const path = (/^(.*)\/page\//.exec(fullPath) || [null, fullPath])[1];
-  const page = parseInt(
-    (/\/page\/(\d+)\/?$/.exec(fullPath) || [null, "1"])[1],
-    10
-  );
+  const [, path, page] = /^(.*)page\/(\d+)\/?$/.exec(fullPath) || [
+    null,
+    fullPath,
+    "1"
+  ];
 
-  return { path, page };
+  return { path, page: parseInt(page, 10) };
 };
