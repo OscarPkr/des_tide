@@ -1,4 +1,4 @@
-# @frontity/google-tag-manager-analytics
+# @frontity/google-tag-manager
 
 ## 0.2.0
 
