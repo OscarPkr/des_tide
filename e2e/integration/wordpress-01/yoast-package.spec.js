@@ -70,10 +70,20 @@ describe("Yoast Package", () => {
    * Visit the specified link with scripts disabled.
    *
    * @param link - The link of the page.
+   * @param options - Visit options.
    */
-  const visitWithoutScripts = (link) => {
-    cy.visit(`http://localhost:3001${link}?name=yoast-package`, {
-      script: false,
+  const visitLink = (link, options) => {
+    cy.visit(`http://localhost:3001${link}?name=yoast-package`, options);
+  };
+
+  /**
+   * Change the router value in Frontity.
+   *
+   * @param link - The link of the page.
+   */
+  const routerSet = (link) => {
+    cy.window().then((win) => {
+      win.frontity.actions.router.set(link);
     });
   };
 
@@ -84,7 +94,7 @@ describe("Yoast Package", () => {
     const link = "/hello-world/";
     const title = "Hello World From Yoast! - Test WP Site";
 
-    before(() => visitWithoutScripts(link));
+    before(() => visitLink(link, { script: false }));
     checkTitle(title);
     checkMetaTags();
   });
@@ -96,7 +106,7 @@ describe("Yoast Package", () => {
     const link = "/sample-page/";
     const title = "Sample Page - Test WP Site";
 
-    before(() => visitWithoutScripts(link));
+    before(() => visitLink(link, { script: false }));
     checkTitle(title);
     checkMetaTags();
   });
@@ -108,7 +118,7 @@ describe("Yoast Package", () => {
     const link = "/category/nature/";
     const title = "Nature Archives - Test WP Site";
 
-    before(() => visitWithoutScripts(link));
+    before(() => visitLink(link, { script: false }));
     checkTitle(title);
     checkMetaTags();
   });
@@ -120,7 +130,7 @@ describe("Yoast Package", () => {
     const link = "/tag/japan/";
     const title = "Japan Archives - Test WP Site";
 
-    before(() => visitWithoutScripts(link));
+    before(() => visitLink(link, { script: false }));
     checkTitle(title);
     checkMetaTags();
   });
@@ -132,7 +142,7 @@ describe("Yoast Package", () => {
     const link = "/author/luisherranz";
     const title = "luisherranz, Author at Test WP Site";
 
-    before(() => visitWithoutScripts(link));
+    before(() => visitLink(link, { script: false }));
     checkTitle(title);
     checkMetaTags();
   });
@@ -144,7 +154,7 @@ describe("Yoast Package", () => {
     const link = "/";
     const title = "Test WP Site - Just another WordPress site";
 
-    before(() => visitWithoutScripts(link));
+    before(() => visitLink(link, { script: false }));
     checkTitle(title);
     checkMetaTags();
   });
@@ -156,7 +166,7 @@ describe("Yoast Package", () => {
     const link = "/movie/the-terminator/";
     const title = "The Terminator - Test WP Site";
 
-    before(() => visitWithoutScripts(link));
+    before(() => visitLink(link, { script: false }));
     checkTitle(title);
     checkMetaTags();
   });
@@ -168,7 +178,7 @@ describe("Yoast Package", () => {
     const title = "Movies Archive - Test WP Site";
     const link = "/movies/";
 
-    before(() => visitWithoutScripts(link));
+    before(() => visitLink(link, { script: false }));
     checkTitle(title);
     checkMetaTags();
   });
@@ -180,8 +190,51 @@ describe("Yoast Package", () => {
     const link = "/actor/linda-hamilton/";
     const title = "Linda Hamilton Archives - Test WP Site";
 
-    before(() => visitWithoutScripts(link));
+    before(() => visitLink(link, { script: false }));
     checkTitle(title);
     checkMetaTags();
+  });
+
+  /**
+   * Test for the `<title>` tag while navigating through Frontity.
+   */
+  describe("Title tag", () => {
+    it("should be correct while navigating", () => {
+      visitLink("/");
+      cy.get("title").should(
+        "contain",
+        "Test WP Site - Just another WordPress site"
+      );
+
+      routerSet("/hello-world/");
+      cy.get("title").should(
+        "contain",
+        "Hello World From Yoast! - Test WP Site"
+      );
+
+      routerSet("/sample-page/");
+      cy.get("title").should("contain", "Sample Page - Test WP Site");
+
+      routerSet("/category/nature/");
+      cy.get("title").should("contain", "Nature Archives - Test WP Site");
+
+      routerSet("/tag/japan/");
+      cy.get("title").should("contain", "Japan Archives - Test WP Site");
+
+      routerSet("/author/luisherranz");
+      cy.get("title").should("contain", "luisherranz, Author at Test WP Site");
+
+      routerSet("/movie/the-terminator/");
+      cy.get("title").should("contain", "The Terminator - Test WP Site");
+
+      routerSet("/movies/");
+      cy.get("title").should("contain", "Movies Archive - Test WP Site");
+
+      routerSet("/actor/linda-hamilton/");
+      cy.get("title").should(
+        "contain",
+        "Linda Hamilton Archives - Test WP Site"
+      );
+    });
   });
 });
