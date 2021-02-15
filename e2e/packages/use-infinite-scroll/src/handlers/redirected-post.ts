@@ -3,12 +3,13 @@ export default {
   priority: 10,
   pattern: "/another-post",
   func: async ({ link, state }) => {
+    // Create a redirection data object.
     Object.assign(state.source.data[link], {
       isRedirection: true,
-      location: "/redirected-post",
-      isExternal: false,
       redirectionStatus: 301,
       is301: true,
+      location: "/redirected-post/",
+      isExternal: false,
     });
   },
 };
