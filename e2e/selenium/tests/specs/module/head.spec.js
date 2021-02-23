@@ -66,7 +66,7 @@ describe("head", function () {
   it("should be able to add inline CSS", async function () {
     assert(
       await driver.executeScript(
-        'return window.getComputedStyle(document.querySelector("body"))["background-color"]'
+        'return window.getComputedStyle(document.querySelector("body"))["backgroundColor"]'
       )
     );
   });
